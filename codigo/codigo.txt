@@ -1,0 +1,305 @@
+
+#include <iostream>
+#include <vector>    // Biblioteca estándar para trabajar con vectores
+#include <stack>     // Biblioteca estándar para trabajar con pilas
+#include <algorithm> // Biblioteca estándar para algoritmos como "sort"
+#include <numeric>   // Biblioteca estándar para funciones como "accumulate"
+#include <cctype>    // Biblioteca estándar para funciones de caracteres
+#include <limits>    // Biblioteca estándar para límites numéricos
+#include <conio.h>
+
+using namespace std;
+
+// Clase que representa un sistema de gestión de datos parametrizado por un tipo T
+template <typename T>
+class SistemaGestionDatos {
+private:
+    vector<T> datos;        // Almacena los datos
+    stack<string> historial; // Guarda un historial de operaciones realizadas
+
+public:
+    // Agrega el dato al final del vector 'datos'
+    void agregarDato(const T& dato) {
+        datos.push_back(dato);
+        // Registra la operación en el historial
+        historial.push("Agregado dato");
+        // Imprime un mensaje
+        cout << "Dato agregado con éxito." << endl;
+        getch(); //espera el enter
+        system("cls");//limpia pantalla
+    }
+
+    // Itera sobre el vector 'datos' utilizando un bucle for-each e imprime cada elemento en una nueva línea
+    void mostrarTodosLosDatos() {
+        cout << "---- TODOS LOS DATOS ----" << endl;
+        for (const T& dato : datos) {
+            cout << dato << endl;
+        }
+        getch(); //espera el enter
+        system("cls");//limpia pantalla
+    }
+
+    // Utiliza la función 'find' de la biblioteca <algorithm> para buscar el dato en el vector 'datos'
+    bool buscarDato(const T& dato) {
+        auto it = find(datos.begin(), datos.end(), dato);
+        // Si 'it' no es igual a 'datos.end()', significa que se encontró el dato y devuelve true, de lo contrario, devuelve false.
+        return it != datos.end();
+        
+    }
+
+    // Utiliza el algoritmo de clasificación "intro sort" para ordenar los datos de manera ascendente
+    void ordenarDatos() {
+        // Utiliza "sort" para ordenar los datos de manera ascendente
+        sort(datos.begin(), datos.end(), [](const T& a, const T& b) {
+            return a < b;
+        });
+        // Registra la operación en el historial
+        historial.push("Datos ordenados");
+        // Imprime un mensaje indicando que los datos se han ordenado con éxito
+        cout << "Datos ordenados de menor a mayor con éxito." << endl;
+    }
+
+    // Calcula estadísticas y genera un informe 
+    void generarReporteEstadistico() {
+    	
+    	/*                        (LOS CONTADORES)                                                       */
+    	// Contador de elementos positivos utilizando count_if y una lambda function
+        int contadorPositivos = count_if(datos.begin(), datos.end(), [](const T& dato) { return dato > 0; });
+        // Contador de elementos negativos utilizando count_if y una lambda function
+        int contadorNegativos = count_if(datos.begin(), datos.end(), [](const T& dato) { return dato < 0; });
+        // Contador de elementos iguales a cero utilizando count_if y una lambda function
+        int contadorCeros = count_if(datos.begin(), datos.end(), [](const T& dato) { return dato == 0; });
+        
+        /*                        (LOS ACUMULADORES)                                                       */
+        // Acumulador total de los elementos utilizando accumulate
+        int acumuladorTotal = accumulate(datos.begin(), datos.end(), 0);
+        // Acumulador de elementos positivos utilizando accumulate y una lambda function
+        int acumuladorPositivos = accumulate(datos.begin(), datos.end(), 0, [](int suma, const T& dato) { 
+        // Suma solo los elementos positivos
+		return (dato > 0) ? suma + dato : suma; });
+		
+		/*
+		               EJEMPLO DE LAMBDA FUNTION
+		               
+		auto suma = [](int a, int b) -> int {
+		     return a + b;
+		};
+		
+		// Uso de la lambda function para sumar
+        int resultado = suma(3, 5);  // Resultado será 8
+        
+        
+        postd: este ejemplo es de una suma pero aqui lo utilizamos para poder acumular lo elementos postivos, negativos, iguales, etc.
+        
+        lambda function tiene:
+        - Funciones Anónimas
+        - Captura de Variables Externas
+        - Parámetros de la Lambda
+        - Retorno de Tipo de la Lambda
+        - Lambda Function como Argumento ---> En uso para [acumulador]
+        - Algoritmos de la STL(Standard Template Library) ---> En uso para [acumulador]
+        - Cierres (Closures)
+        - Funciones de Orden Superior
+        
+		*/
+
+        cout << "---- REPORTE ESTADISTICO ----" << endl;
+        cout << "Contador Positivos: " << contadorPositivos << endl;
+        cout << "Contador Negativos: " << contadorNegativos << endl;
+        cout << "Contador Ceros: " << contadorCeros << endl;
+        cout << "Acumulador Total: " << acumuladorTotal << endl;
+        cout << "Acumulador Positivos: " << acumuladorPositivos << endl;
+    }
+
+    // Elimina un dato por opción
+    void eliminarDatoPorOpcion(int opcion) {
+    	// Verifica si la opción proporcionada es válida (dentro del rango del vector 'datos')
+        if (opcion >= 1 && opcion <= datos.size()) {
+        	// Obtiene el dato correspondiente a la opción seleccionada
+            T dato = datos[opcion - 1];
+            // Obtiene el dato correspondiente a la opción seleccionada
+            auto it = remove(datos.begin(), datos.end(), dato);
+            // Elimina los elementos coincidentes del vector utilizando erase
+            datos.erase(it, datos.end());
+            // Registra la operación en el historial
+            historial.push("Eliminado dato");
+            // Imprime un mensaje indicando que el dato se ha eliminado con éxito
+            cout << "Dato eliminado con éxito." << endl;
+        } else {
+        	// Imprime si no es válida
+            cout << "Opción no válida." << endl;
+        }
+    }
+
+    // Elimina todos los datos
+    void eliminarTodosLosDatos() {
+    	// Utiliza "vector::clear" para eliminar todos los elementos del vector 'datos'
+        datos.clear();
+        // Registra la operación en el historial
+        historial.push("Eliminados todos los datos");
+        // Imprime un mensaje indicando que se han eliminado con éxito
+        cout << "Todos los datos han sido eliminados." << endl;
+    }
+
+    // Devuelve el tamaño del vector 'datos' utilizando "vector::size()"
+    size_t size() const {
+        return datos.size();
+    }
+
+    // Sobrecarga del operador de acceso [] para obtener el elemento en la posición 'index'
+    // que esta en "void eliminarDatoPorOpcion"
+    const T& operator[](size_t index) const {
+        return datos[index];
+    }
+
+    // Muestra el historial de operaciones realizadas
+    void mostrarHistorial() {
+        cout << "---- HISTORIAL DE OPERACIONES ----" << endl;
+        // Crea una copia temporal del historial
+        stack<string> tempHistorial = historial;
+        // Itera sobre la copia temporal y muestra cada operación
+        while (!tempHistorial.empty()) {
+            cout << tempHistorial.top() << endl;
+            tempHistorial.pop();
+        }
+    }
+};
+
+int main() {
+    // Tipo de dato manejado por la clase SistemaGestionDatos (int, double, long, etc.)
+    // Podemos cambiar 'double' por otro tipo según las necesidades.
+    using DataType = double;
+
+    // Instancia de SistemaGestionDatos parametrizada con el tipo de dato DataType
+    SistemaGestionDatos<DataType> sistemaDatos;
+
+    while (true) {
+        cout << "---------------------------------" << endl;
+        cout << "MENU DE OPCIONES - GESTION DE DATOS" << endl;
+        cout << "---------------------------------" << endl;
+        cout << "1. Registro de datos" << endl;
+        cout << "2. Consultar todos los datos" << endl;
+        cout << "3. Buscar datos" << endl;
+        cout << "4. Ordenamiento de datos" << endl;
+        cout << "5. Reporte estadístico" << endl;
+        cout << "6. Eliminación de un dato" << endl;
+        cout << "7. Eliminación de todos los datos" << endl;
+        cout << "8. Mostrar historial de operaciones" << endl;
+        cout << "9. Salir" << endl;
+
+        cout << "\n>> ";
+        int opcion;
+        cin >> opcion;
+
+        switch (opcion) {
+            case 1: {
+                DataType dato;
+                // Solicita al usuario ingresar un dato (solo números)
+                while (true) {
+                    cout << "Ingrese un dato (solo números): ";
+                    cin >> dato;
+                    
+                    // Verifica si la entrada es inválida y solicita nuevamente si es necesario
+                    if (cin.fail()) {
+                        cin.clear();
+                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                        cout << "Por favor, ingrese solo números." << endl;
+                    } else {
+                        break;
+                    }
+                }
+                 // Agrega el dato al sistema
+                sistemaDatos.agregarDato(dato);
+                break;
+            }
+            case 2: {
+            	// Muestra todos los datos almacenados en el sistema
+                sistemaDatos.mostrarTodosLosDatos();
+
+                break;
+            }
+            case 3: {
+                DataType dato;
+                cout << "Ingrese el dato a buscar: ";
+                cin >> dato;
+                // Busca el dato en el sistema y muestra un mensaje indicando si se encontró o no
+                if (sistemaDatos.buscarDato(dato)) {
+                    cout << "Dato encontrado." << endl;
+                } else {
+                    cout << "Dato no encontrado." << endl;
+                }
+                getch(); //espera el enter
+                system("cls");//limpia pantalla
+                break;
+            }
+            case 4: {
+            	// Llama al método en el sistema que ordena los datos
+                sistemaDatos.ordenarDatos();
+                getch(); //espera el enter
+                system("cls");//limpia pantalla
+                break;
+            }
+            case 5: {
+            	// Llama al método en el sistema que calcula estadísticas y genera un informe
+                sistemaDatos.generarReporteEstadistico();
+                getch(); //espera el enter
+                system("cls");//limpia pantalla
+                break;
+            }
+            case 6: {
+            	// Muestra la lista de datos para que el usuario elija cuál eliminar
+                cout << "Seleccione el dato a eliminar:" << endl;
+                for (int i = 0; i < sistemaDatos.size(); ++i) {
+                    cout << i + 1 << ". " << sistemaDatos[i] << endl;
+                }
+                
+                // Solicita al usuario que ingrese la opción a eliminar
+                cout << "\n>> ";
+                int opcionEliminar;
+                cin >> opcionEliminar;
+                // Llama al método en el sistema que elimina el dato seleccionado
+                sistemaDatos.eliminarDatoPorOpcion(opcionEliminar);
+                getch(); //espera el enter
+                system("cls");//limpia pantalla
+                break;
+            }
+            case 7: {
+            	// Llama al método en el sistema que elimina todos los datos
+                sistemaDatos.eliminarTodosLosDatos();
+                getch(); //espera el enter
+                system("cls");//limpia pantalla
+                break;
+            }
+            case 8: {
+            	// Llama al método en el sistema que muestra el historial de operaciones
+                sistemaDatos.mostrarHistorial();
+                getch(); //espera el enter
+                system("cls");//limpia pantalla
+                break;
+            }
+            case 9: {
+                cout << "¿Está seguro de que desea salir? (S/N): ";
+                char respuesta;
+                cin >> respuesta;
+                // Verifica si la respuesta es 'S' o 's' para salir del programa
+                if (respuesta == 'S' || respuesta == 's') {
+                    cout << "Saliendo del programa." << endl;
+                    return 0;
+                }
+                getch(); //espera el enter
+                system("cls");//limpia pantalla
+                break;
+            }
+            default: {
+                cout << "Opción no válida. Intente nuevamente." << endl;
+                getch(); //espera el enter
+                system("cls");//limpia pantalla
+                break; // Sale del switch
+            }
+        }
+    }
+
+    return 0;
+}
+
+/*                     A ESTE PUNTO PREFIERO DECLARAR IMPUESTOS, EN VEZ DE DECLARAR VARIABLES T-T                                     */

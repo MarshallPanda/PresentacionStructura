@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>⏳Chronos⏳</title>
+    <link rel="shortcut icon" href="lo">
+    <link rel="stylesheet" type="text/css" href="cssInicio/style.css">
+    <link rel="icon" type="image/png" href="logo-universidad-continental.webp">
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <div class="logo"><a href="index.html">Chronos</a></div>
+            <ul class="links">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="Depuracion.htm">Compilador</a></li>
+                <li><a href="galeria.html">Galeria</a></li>
+            </ul>
+            <a href="Presentacion.html" class="action_btn">Empezar</a>
+            <div class="toggle_btn">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+        <div class="dropdown_menu">
+            <ul>
+              <li><a href="index.html">Inicio</a></li>
+              <li><a href="Compilador.html">Compilador</a></li>
+              <li><a href="galeria.html">Galeria</a></li>
+                <li><a href="Presentacion.html" class="action_btn">Empezar</a></li>
+            </ul>
+        </div>
+
+        <div class="wrapper">
+          <form action="Presentacion.html" method="get">
+            <button >
+              Empezamos! 
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+            </button>
+          </form>
+        </div>
+        
+    </header>    
+<!--LAS CREDITOS Y REDES SOCIALES-->
+        <footer>
+          <p>
+            Creado por <i class="fa fa-heart"></i>
+            <a target="_blank" href="#">Jeimy Pando</a>
+            Follow me : 
+              <a target="_blank"  href="https://github.com/MarshallPanda/Chronos.githup.pe.git"><i class="fab fa-github"></i></a>
+            <a target="_blank" href="#"><i class="fab fa-whatsapp"></i></a> 
+          </p>
+        </footer>
+        
+
+    </header>
+
+    <main>
+        <section id="hero">
+            <h1 style="text-shadow: 1px 1px 8px #422095;">EXPOSICIÓN</h1>
+            <p>Presentacio del codigo <b>Examen Final</b> por medio de paguina web</p>
+            <p>_________________________________________</p><br>
+            <p style="font-size: 28px;">  INTEGRANTES                                </p>
+            <p>________________________________________</p><br>
+            <P   id="nombre" style="font-size: 28px;">
+              1º Pando Alcantara, jeimy <br>
+              2º Zarate Cardenas, Cristhian <br>
+              3º Quispe Zarate, Julio  <br>
+              4º Quispe Toribio, Emers <br>
+              5º Ramírez Guzmán David  <br>
+              6º Melchor Villa  Jemina
+            
+            </P>
+
+        </section>
+    </main>
+    <script>
+      //Obtenemos una referencia del mini menu (amarillo)
+        const toggleBtn = document.querySelector('.toggle_btn');
+        const toggleBtnIcon = document.querySelector('.toggle_btn i');
+        const dropDownMenu = document.querySelector('.dropdown_menu');
+
+        //funcion del boton del mini menu (amarillo)
+        toggleBtn.onclick = function () {
+            dropDownMenu.classList.toggle('open');
+            const isOpen = dropDownMenu.classList.contains('open');
+            toggleBtnIcon.className = isOpen ? 'fas fa-times' : 'fas fa-bars';
+        };
+    </script>
+</body>
+</html>

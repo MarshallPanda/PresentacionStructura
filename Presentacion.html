@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="shortcut icon" href="lo">
+    <link rel="stylesheet" type="text/css" href="cssInicio/style.css">
+    <link rel="stylesheet" href="cssInicio/stylePresentacionCodigo.css">
+    <link rel="icon" type="image/png" href="logo-universidad-continental.webp">
+    <title>⏳Chronos⏳ - Explicación Code</title>
+
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <div class="logo"><a href="index.html">Chronos</a></div>
+            <ul class="links">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="Depuracion.htm">Compilador</a></li>
+                <li><a href="galeria.html">Galeria</a></li>
+            </ul>
+            <a href="Presentacion.html" class="action_btn">Empezar</a>
+            <div class="toggle_btn">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+        <div class="dropdown_menu">
+            <ul>
+              <li><a href="index.html">Inicio</a></li>
+              <li><a href="Compilador.html">Compilador</a></li>
+              <li><a href="galeria.html">Galeria</a></li>
+                <li><a href="Presentacion.html" class="action_btn">Empezar</a></li>
+            </ul>
+        </div>
+    </header>  
+    
+    <div class="explanation">
+        <h2>Explicación del código</h2>
+        <p></p>
+    </div>
+
+    <footer>
+        <p>
+            Creado por <i class="fa fa-heart"></i>
+            <a target="_blank" href="#link">Jeimy Pando</a>
+            Follow me : 
+            <a target="_blank"  href="https://github.com/MarshallPanda/Chronos.githup.pe.git"><i class="fab fa-github"></i></a>
+            <a target="_blank" href="#"><i class="fab fa-whatsapp"></i></a> 
+        </p>
+    </footer>
+
+    <div class="file-menu-container">
+        <div class="file-menu">
+            <h3>Contenido del archivo "codigo.txt"</h3>
+            <pre id="code-content" contenteditable="false"></pre>
+        </div>
+        <div class="black-box">
+            <button class="copy-button" id="copy-button">Copiar</button>
+            <div class="green-text"></div>
+        </div>
+    </div>
+
+    <div class="selection-box"></div>
+    
+    <script>
+        //Obtenemos una referencia del mini menu (amarillo)
+        const toggleBtn = document.querySelector('.toggle_btn');
+        const toggleBtnIcon = document.querySelector('.toggle_btn i');
+        const dropDownMenu = document.querySelector('.dropdown_menu');
+
+        //funcion del boton del mini menu (amarillo)
+        toggleBtn.onclick = function () {
+            dropDownMenu.classList.toggle('open');
+            const isOpen = dropDownMenu.classList.contains('open');
+            toggleBtnIcon.className = isOpen ? 'fas fa-times' : 'fas fa-bars';
+        };
+
+        
+        const codeContent = document.getElementById('code-content');
+        const selectionBox = document.querySelector('.selection-box');
+        const greenText = document.querySelector('.green-text');
+        let selectedText = '';
+
+        fetch('codigo/codigo.txt')
+            .then(response => response.text())
+            .then(data => {
+                codeContent.textContent = data;
+            })
+            .catch(error => {
+                console.error('Error al cargar el archivo: ' + error);
+            });
+
+        codeContent.addEventListener('mouseup', () => {
+            selectedText = window.getSelection().toString();
+            if (selectedText) {
+                const selectionRect = window.getSelection().getRangeAt(0).getBoundingClientRect();
+                selectionBox.style.display = 'block';
+                selectionBox.textContent = selectedText;
+                selectionBox.style.left = selectionRect.left + 'px';
+                selectionBox.style.top = selectionRect.top - 40 + 'px';
+                selectionBox.style.width = codeContent.offsetWidth + 'px';
+
+                // Simular efecto Matrix en el cuadro negro
+                simulateMatrixEffect(selectedText);
+            } else {
+                selectionBox.style.display = 'none';
+                greenText.style.maxHeight = '0';
+            }
+        });
+
+        document.getElementById('copy-button').addEventListener('click', () => {
+            // Copiar el contenido del archivo "codigo.txt" al portapapeles
+            const textToCopy = codeContent.textContent;
+            copyToClipboard(textToCopy);
+        });
+
+        function copyToClipboard(text) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+        }
+
+        function simulateMatrixEffect(text) {
+            let index = 0;
+            const interval = 5; // Aumenta la velocidad
+            greenText.textContent = '';
+
+            function addNextCharacter() {
+                if (index < text.length) {
+                    greenText.textContent += text.charAt(index);
+                    index++;
+                    setTimeout(addNextCharacter, interval);
+                }
+            }
+
+            addNextCharacter();
+        }
+    </script>
+</body>
+</html>
